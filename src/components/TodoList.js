@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CreateTask from "../modals/CreateTask";
 
 const TodoList = () => {
@@ -8,10 +8,18 @@ const TodoList = () => {
   const saveTask = (taskObj) => {
     let tempList = taskList;
     tempList.push(taskObj);
+    localStorage.setItem("taskList", JSON.stringify(tempList));
     setTaskList(tempList);
-    setModal(false)
+    setModal(false);
   };
+  useEffect(() => {
+    let arr = localStorage.getItem("taskList");
+    if (arr) {
+      let obj = JSON.parse(arr);
 
+      setTaskList(obj);
+    }
+  }, []);
   return (
     <>
       <div className="header text-center">
@@ -20,7 +28,11 @@ const TodoList = () => {
           Create Task
         </button>
       </div>
-      <div className="task-container">{taskList.map((obj)=> <li>{obj.Name}</li>)}</div>
+      <div className="task-container">
+        {taskList.map((obj) => (
+          <li>{obj.Name}</li>
+        ))}
+      </div>
 
       <CreateTask toggle={toggle} modal={modal} saveTask={saveTask} />
     </>
