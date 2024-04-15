@@ -1,19 +1,28 @@
-import React ,{useState} from "react";
-import CreateTask from "../modals/CreateTask"
+import React, { useState } from "react";
+import CreateTask from "../modals/CreateTask";
 
 const TodoList = () => {
   const [modal, setModal] = useState(false);
+  const [taskList, setTaskList] = useState([]);
   const toggle = () => setModal(!modal);
+  const saveTask = (taskObj) => {
+    let tempList = taskList;
+    tempList.push(taskObj);
+    setTaskList(tempList);
+    setModal(false)
+  };
 
   return (
     <>
       <div className="header text-center">
         <h3>Todo List</h3>
-        <button className="btn btn-primary mt-2">Create Task</button>
+        <button className="btn btn-primary mt-2" onClick={() => setModal(true)}>
+          Create Task
+        </button>
       </div>
-      <div className="task-container"></div>
+      <div className="task-container">{taskList.map((obj)=> <li>{obj.Name}</li>)}</div>
 
-      <CreateTask toggle={toggle} modal={modal}/>
+      <CreateTask toggle={toggle} modal={modal} saveTask={saveTask} />
     </>
   );
 };
